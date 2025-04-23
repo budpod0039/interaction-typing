@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Typing Interaction</title>
+  <style>
+    @font-face {
+      font-family: 'UniversNextProThin';
+      src: url('./UniversNextProThin.woff2') format('woff2');
+      font-weight: 100;
+      font-style: normal;
+    }
+  
+
+body.error #title {
+  color: #ffffff;
+  color: color(display-p3 1 1 1);
+}
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      font-family: 'UniversNextProThin', monospace;
+      font-size: 24px;
+      position: relative;
+      color: #00ffff;
+      color: color(display-p3 0 1 1); /* 시안 fallback → p3 */
+    }
+  
+    body.error {
+      background: #ff0000;
+      background: color(display-p3 1 0 0);
+      color: #ffffff;
+      color: color(display-p3 1 1 1);
+    }
+  
+    #title {
+  font-family: 'UniversNextProThin', sans-serif;
+  font-size: 3.5em;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
+  top: 5vh;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #00ffff;
+  color: color(display-p3 0 1 1);
+}
+    
+    #typed {
+      position: absolute;
+      top: 75vh;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: pre-wrap;
+      text-align: center;
+    }
+  
+    #input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: inherit;
+      font-size: 24px;
+      font-family: inherit;
+      width: 80%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="title">
+    <div>
+      <span style="letter-spacing: -0.24em;">c</span>
+      <span style="letter-spacing: -0.26em;">r</span>
+      <span style="letter-spacing: -0.29em;">E</span>
+      <span style="letter-spacing: -0.28em;">a</span>
+      <span style="letter-spacing: -0.25em;">t</span>
+      <span>ing [queer* cinema]</span>
+    </div>
+    <div>for powerful universality</div>
+  </div>
+
+  <div id="typed" contenteditable="true"></div>
+
+  <script>
+    const log = [
+      { key: "S", delay: 300 },
+      { key: "p", delay: 120 },
+      { key: "r", delay: 100 },
+      { key: "i", delay: 90 },
+      { key: "n", delay: 110 },
+      { key: "g", delay: 100 },
+      { key: ".", delay: 120 },
+      { key: " ", delay: 100 },
+      { key: "Y", delay: 140 },
+      { key: "o", delay: 100 },
+      { key: "r", delay: 100 },
+      { key: "k", delay: 100 },
+      { key: "s", delay: 100 },
+      { key: "h", delay: 100 },
+      { key: "i", delay: 100 },
+      { key: "r", delay: 100 },
+      { key: "e", delay: 100 },
+      { key: ".", delay: 100 }
+    ];
+
+    const typedEl = document.getElementById("typed");
+    typedEl.addEventListener("input", () => {
+  current = typedEl.innerText;
+  checkError(current);
+});
+
+    let current = "";
+    let index = 0;
+
+    function typeNext() {
+      if (index >= log.length) {
+        checkError(current);
+        return;
+      }
+
+      const { key, delay } = log[index++];
+      current += key;
+      typedEl.textContent = current;
+
+      setTimeout(typeNext, delay);
+    }
+
+    function checkError(text) {
+      if (!text.toLowerCase().includes("casual sex")) {
+        document.body.classList.add("error");
+        window.parent.postMessage({ errorState: true }, "*");
+      } else {
+        document.body.classList.remove("error");
+        window.parent.postMessage({ errorState: false }, "*");
+      }
+    }
+
+    // Start typing
+    typeNext();
+  </script>
+
+</body>
+</html>
